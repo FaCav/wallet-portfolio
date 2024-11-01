@@ -1,7 +1,7 @@
 const coinMarketCapApiKey = '9506d3c4-9710-407b-80a4-53483ed84705'; // Replace with your actual API key
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
-    const etherscanApiKey = 'YOUR_ETHERSCAN_API_KEY'; // Your Etherscan API key
+    const etherscanApiKey = 'BUUSIYDAAS1AV785RPHFY1F378I59MBGKJ'; // Your Etherscan API key
 
     if (!walletAddress) {
         document.getElementById("results").innerText = "Please enter a wallet address.";
