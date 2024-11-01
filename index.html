@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Portfolio</title>
+    <title>VistaFolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Check Wallet Portfolio</h1>
-        <input type="text" id="walletAddress" placeholder="Enter Wallet Address">
-        <button onclick="fetchWalletData()">Search</button>
+    <div class="vista-container">
+        <header>
+            <img src="your-logo.png" alt="VistaFolio Logo" class="logo">
+            <h1>VistaFolio</h1>
+            <p>Your Retro-Inspired Portfolio Tracker</p>
+        </header>
+        <div class="search-container">
+            <input type="text" id="walletAddress" placeholder="Enter Wallet Address">
+            <button onclick="fetchWalletData()">Search</button>
+        </div>
         <div id="results"></div>
     </div>
     <script src="script.js"></script>
