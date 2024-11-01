@@ -17,6 +17,12 @@
             <input type="text" id="walletAddress" placeholder="Enter Wallet Address">
             <button onclick="fetchWalletData()">Search</button>
         </div>
+        <div id="network-buttons">
+    <button onclick="filterTokens('ethereum')">Ethereum</button>
+    <button onclick="filterTokens('bsc')">Binance Smart Chain</button>
+    <button onclick="filterTokens('polygon')">Polygon</button>
+</div>
+
         <div id="results"></div>
     </div>
     <script src="script.js"></script>
