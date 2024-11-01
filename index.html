@@ -3,30 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>VistaFolio</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="vista-container">
-        <header>
-    <img src="logoEthervista.gif" alt="VistaFolio Logo" class="logo">
-    <h1>VistaFolio</h1>
-    <p>Your Retro-Inspired Portfolio Tracker</p>
-</header>
-        <div class="search-container">
-            <input type="text" id="walletAddress" placeholder="Enter wallet address" />
-<button onclick="fetchWalletData()">Check Wallet</button>
-<div id="results"></div>
-
+    <div class="container">
+        <div class="sidebar">
+            <button id="checkWalletButton">Check Wallet</button>
         </div>
-        <div id="network-buttons">
-    <button onclick="filterTokens('ethereum')">Ethereum</button>
-    <button onclick="filterTokens('bsc')">Binance Smart Chain</button>
-    <button onclick="filterTokens('polygon')">Polygon</button>
-</div>
-
-        <div id="results"></div>
+        <div class="main-content">
+            <h1>VistaFolio</h1>
+            <h2>Your Retro-Inspired Portfolio Tracker</h2>
+            <input type="text" id="walletAddress" placeholder="Enter wallet address" />
+            <div id="results"></div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
