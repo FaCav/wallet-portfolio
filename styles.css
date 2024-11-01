@@ -28,4 +28,22 @@ button {
 #results {
     margin-top: 20px;
     font-size: 18px;
+    text-align: left;
+}
+
+#results h2, #results h3 {
+    color: #333;
+}
+
+#results ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#results li {
+    background: #f9f9f9;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
