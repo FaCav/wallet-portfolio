@@ -1,4 +1,3 @@
-const coinMarketCapApiKey = '9506d3c4-9710-407b-80a4-53483ed84705'; // Replace with your actual API key
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
     const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6'; // Your Etherscan API key
@@ -57,7 +56,7 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const tokenPriceResponse = await fetch(`/.netlify/getTokenPrice?symbol=${symbol}&convert=USD`); {
+            const tokenPriceResponse = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}&convert=USD`, {
                 headers: {
                     'X-CMC_PRO_API_KEY': coinMarketCapApiKey, // Use your CoinMarketCap API key
                     'Accept': 'application/json'
@@ -89,4 +88,3 @@ async function fetchWalletData() {
         console.error("Error:", error);
     }
 }
-
