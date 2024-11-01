@@ -1,3 +1,6 @@
+let allTokens = [];
+let currentNetwork = 'ethereum';
+
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
     const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6';
@@ -13,19 +16,15 @@ async function fetchWalletData() {
         // Fetch ETH balance
         const ethResponse = await fetch(`https://api.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest&apikey=${etherscanApiKey}`);
         const ethData = await ethResponse.json();
-        console.log("ETH Data:", ethData); // Debugging
 
         let ethBalance = 0;
         if (ethData.status === "1") {
             ethBalance = ethData.result / 1e18; // Convert from wei to ETH
-        } else {
-            throw new Error("Failed to fetch ETH balance");
         }
 
         // Fetch ERC-20 token transactions
         const tokenResponse = await fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${walletAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${etherscanApiKey}`);
         const tokenData = await tokenResponse.json();
-        console.log("Token Data:", tokenData); // Debugging
 
         let tokenBalances = {};
         if (tokenData.status === "1") {
@@ -38,34 +37,33 @@ async function fetchWalletData() {
                     if (!tokenBalances[tokenSymbol]) {
                         tokenBalances[tokenSymbol] = {
                             balance: 0,
-                            tokenAddress: tx.contractAddress
+                            tokenAddress: tx.contractAddress,
+                            network: 'ethereum' // Assuming tokens are on Ethereum
                         };
                     }
                     tokenBalances[tokenSymbol].balance += tokenValue;
                 }
             });
-        } else {
-            throw new Error("Failed to fetch ERC-20 token transactions");
         }
+
+        // Store all tokens for filtering
+        allTokens = tokenBalances;
 
         // Fetch token prices and calculate total values
         let totalValue = ethBalance; // Start with ETH balance
         let tokenHTML = "";
 
-        for (const [symbol, info] of Object.entries(tokenBalances)) {
-            try {
-                const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-                const tokenPriceResponse = await fetch(`${corsProxy}https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
-                const priceData = await tokenPriceResponse.json();
-                console.log("Price Data:", priceData); // Debugging
+        for (const [symbol, info] of Object.entries(allTokens)) {
+            const tokenPriceResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
+            const priceData = await tokenPriceResponse.json();
 
-                const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
-                const tokenValue = info.balance * tokenPrice;
+            const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
+            const tokenValue = info.balance * tokenPrice;
+
+            // Only include tokens with a total value greater than $10
+            if (tokenValue > 10) {
                 totalValue += tokenValue;
-
                 tokenHTML += `<li>${info.balance.toFixed(4)} ${symbol} ($${tokenPrice.toFixed(2)} each) - Total: $${tokenValue.toFixed(2)}</li>`;
-            } catch (priceError) {
-                console.error("Error fetching price data for token:", symbol, priceError);
             }
         }
 
@@ -81,4 +79,17 @@ async function fetchWalletData() {
         document.getElementById("results").innerHTML = "Error fetching data. Please try again.";
         console.error("Error:", error);
     }
+}
+
+function filterTokens(network) {
+    currentNetwork = network; // Update current network
+    const filteredTokens = Object.entries(allTokens).filter(([symbol, info]) => info.network === currentNetwork);
+    
+    // Filter and display tokens only if the total value is greater than $10
+    const filteredHTML = filteredTokens.map(([symbol, info]) => {
+        const tokenValue = info.balance * (priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0);
+        return tokenValue > 10 ? `<li>${info.balance.toFixed(4)} ${symbol} - Total: $${tokenValue.toFixed(2)}</li>` : '';
+    }).join('');
+    
+    document.getElementById("results").innerHTML = `<h3>Filtered Tokens on ${network.charAt(0).toUpperCase() + network.slice(1)}:</h3><ul>${filteredHTML}</ul>`;
 }
