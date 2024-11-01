@@ -1,7 +1,7 @@
 const coinMarketCapApiKey = '9506d3c4-9710-407b-80a4-53483ed84705'; // Replace with your actual API key
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
-    const etherscanApiKey = 'BUUSIYDAAS1AV785RPHFY1F378I59MBGKJ'; // Your Etherscan API key
+    const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6'; // Your Etherscan API key
 
     if (!walletAddress) {
         document.getElementById("results").innerText = "Please enter a wallet address.";
@@ -14,6 +14,7 @@ async function fetchWalletData() {
         // Fetch ETH balance
         const ethResponse = await fetch(`https://api.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest&apikey=${etherscanApiKey}`);
         const ethData = await ethResponse.json();
+        console.log("ETH Data:", ethData); // Log ETH data
 
         let ethBalance = 0;
         if (ethData.status === "1") {
@@ -23,6 +24,7 @@ async function fetchWalletData() {
         // Fetch ERC-20 token transactions
         const tokenResponse = await fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${walletAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${etherscanApiKey}`);
         const tokenData = await tokenResponse.json();
+        console.log("Token Data:", tokenData); // Log token data
 
         let tokenBalances = {};
         if (tokenData.status === "1") {
@@ -44,6 +46,9 @@ async function fetchWalletData() {
             });
         }
 
+        // Log token balances
+        console.log("Token Balances:", tokenBalances);
+
         // Store all tokens for filtering
         allTokens = tokenBalances;
 
@@ -59,6 +64,7 @@ async function fetchWalletData() {
                 }
             });
             const priceData = await tokenPriceResponse.json();
+            console.log("Price Data for", symbol, ":", priceData); // Log price data
 
             const tokenPrice = priceData.data[symbol] ? priceData.data[symbol].quote.USD.price : 0;
             const tokenValue = info.balance * tokenPrice;
@@ -83,3 +89,4 @@ async function fetchWalletData() {
         console.error("Error:", error);
     }
 }
+
