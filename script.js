@@ -1,9 +1,7 @@
-let allTokens = [];
-let currentNetwork = 'ethereum';
-
+const coinMarketCapApiKey = '9506d3c4-9710-407b-80a4-53483ed84705'; // Replace with your actual API key
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
-    const etherscanApiKey = 'YOUR_ETHERSCAN_API_KEY';
+    const etherscanApiKey = 'YOUR_ETHERSCAN_API_KEY'; // Your Etherscan API key
 
     if (!walletAddress) {
         document.getElementById("results").innerText = "Please enter a wallet address.";
@@ -54,11 +52,15 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const corsProxy = 'https://thingproxy.freeboard.io/fetch/';
-            const tokenPriceResponse = await fetch(`${corsProxy}https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
+            const tokenPriceResponse = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}&convert=USD`, {
+                headers: {
+                    'X-CMC_PRO_API_KEY': coinMarketCapApiKey, // Use your CoinMarketCap API key
+                    'Accept': 'application/json'
+                }
+            });
             const priceData = await tokenPriceResponse.json();
 
-            const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
+            const tokenPrice = priceData.data[symbol] ? priceData.data[symbol].quote.USD.price : 0;
             const tokenValue = info.balance * tokenPrice;
 
             // Only include tokens with a total value greater than $10
@@ -80,17 +82,4 @@ async function fetchWalletData() {
         document.getElementById("results").innerHTML = "Error fetching data. Please try again.";
         console.error("Error:", error);
     }
-}
-
-function filterTokens(network) {
-    currentNetwork = network; // Update current network
-    const filteredTokens = Object.entries(allTokens).filter(([symbol, info]) => info.network === currentNetwork);
-    
-    // Filter and display tokens only if the total value is greater than $10
-    const filteredHTML = filteredTokens.map(([symbol, info]) => {
-        const tokenValue = info.balance * (priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0);
-        return tokenValue > 10 ? `<li>${info.balance.toFixed(4)} ${symbol} - Total: $${tokenValue.toFixed(2)}</li>` : '';
-    }).join('');
-    
-    document.getElementById("results").innerHTML = `<h3>Filtered Tokens on ${network.charAt(0).toUpperCase() + network.slice(1)}:</h3><ul>${filteredHTML}</ul>`;
 }
