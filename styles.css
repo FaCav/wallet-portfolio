@@ -122,3 +122,19 @@ button:hover {
 #network-buttons button:hover {
     background-color: #0056b3;
 }
+
+h3 {
+    color: #ffffff; /* Change color based on your theme */
+}
+
+ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+}
+
+li {
+    padding: 5px; /* Space between tokens */
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+    margin-bottom: 5px; /* Space between list items */
+    border-radius: 5px; /* Rounded corners */
+}
