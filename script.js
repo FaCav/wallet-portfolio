@@ -54,7 +54,8 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const tokenPriceResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
+            const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+            const tokenPriceResponse = await fetch(`${corsProxy}https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
             const priceData = await tokenPriceResponse.json();
 
             const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
