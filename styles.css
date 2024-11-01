@@ -1,130 +1,27 @@
-/* General Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0a2a5e, #10316b, #1b4079);
-    color: #f1f1f1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
-.vista-container {
-    width: 90%;
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    text-align: center;
-}
-
-header {
-    margin-bottom: 20px;
-}
-
-.logo {
-    width: 100px; /* Smaller size for better fit */
-    height: auto;
-    margin-bottom: 10px;
-}
-
-
-h1 {
-    font-size: 2em;
-    color: #e0e0e0;
-    margin: 0;
-}
-h2 {
-    font-size: 1.5em; /* Smaller font size for the wallet */
-}
-
-p {
-    color: #d0d0d0;
-    margin-top: 5px;
-}
-
-/* Search Bar and Button */
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #6b6b6b;
-    border-radius: 10px 0 0 10px;
-    outline: none;
-    width: 80%;
-}
-
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background: linear-gradient(145deg, #1b9cfc, #12e1ff);
-    border: none;
-    color: #fff;
-    border-radius: 0 10px 10px 0;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-button:hover {
-    background: linear-gradient(145deg, #0a8abf, #12d1ff);
-}
-
-/* Results Section */
-#results {
-    font-size: 1rem;
-    color: #f1f1f1;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
-    text-align: left;
-}
-
-#results h2, #results h2 {
-    color: #e0e0e0;
-}
-
-#results ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#results li {
-    background: rgba(255, 255, 255, 0.2);
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 8px;
-}
-
-#network-buttons {
-    margin: 10px 0;
-}
-
-#network-buttons button {
-    margin: 5px;
-    padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #002147; /* Dark background */
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    font-family: Arial, sans-serif;
 }
 
-#network-buttons button:hover {
-    background-color: #0056b3;
+.container {
+    display: flex;
 }
 
-h3 {
-    color: #ffffff; /* Change color based on your theme */
+.sidebar {
+    width: 200px; /* Adjust sidebar width */
+    background-color: #005f7f; /* Sidebar background color */
+    padding: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    margin: 10px 0;
 }
 
 ul {
