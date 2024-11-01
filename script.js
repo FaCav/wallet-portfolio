@@ -3,7 +3,7 @@ let currentNetwork = 'ethereum';
 
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
-    const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6';
+    const etherscanApiKey = 'YOUR_ETHERSCAN_API_KEY';
 
     if (!walletAddress) {
         document.getElementById("results").innerText = "Please enter a wallet address.";
@@ -54,8 +54,7 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-            const tokenPriceResponse = await fetch(`${corsProxy}https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
+            const tokenPriceResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
             const priceData = await tokenPriceResponse.json();
 
             const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
