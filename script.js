@@ -57,7 +57,7 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const tokenPriceResponse = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}&convert=USD`, {
+            const tokenPriceResponse = await fetch(`/.netlify/getTokenPrice?symbol=${symbol}&convert=USD`); {
                 headers: {
                     'X-CMC_PRO_API_KEY': coinMarketCapApiKey, // Use your CoinMarketCap API key
                     'Accept': 'application/json'
