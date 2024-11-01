@@ -19,7 +19,6 @@ async function fetchWalletData() {
             ethBalance = ethData.result / 1e18; // Convert from wei to ETH
         }
 
-        // Fetch token balances from Etherscan
         const tokenResponse = await fetch(`https://api.etherscan.io/api?module=account&action=tokenlist&address=${walletAddress}&apikey=${etherscanApiKey}`);
         const tokenData = await tokenResponse.json();
 
@@ -34,7 +33,6 @@ async function fetchWalletData() {
                 const tokenBalance = parseFloat(token.balance) / Math.pow(10, token.decimals);
                 
                 if (tokenBalance > 0) {
-                    // Assume we categorize tokens based on network
                     let network = token.chainId === '1' ? 'Ethereum' : (token.chainId === '56' ? 'BinanceSmartChain' : 'Polygon');
                     tokenBalances[network][tokenSymbol] = {
                         balance: tokenBalance,
@@ -44,21 +42,18 @@ async function fetchWalletData() {
             });
         }
 
-        // Calculate total value for ETH and tokens
         let totalValue = ethBalance; // Start with ETH balance
         let tokenHTML = "";
 
         for (const [network, tokens] of Object.entries(tokenBalances)) {
             let networkHTML = `<h3>${network} Tokens:</h3><ul>`;
             for (const [symbol, info] of Object.entries(tokens)) {
-                // Fetch token price from CoinMarketCap
                 const tokenPriceResponse = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}&CMC_PRO_API_KEY=${coinMarketCapApiKey}`);
                 const priceData = await tokenPriceResponse.json();
 
                 const tokenPrice = priceData.data[symbol] ? priceData.data[symbol].quote.USD.price : 0; // Get the token price in USD
                 const tokenValue = info.balance * tokenPrice;
 
-                // Only include tokens with a total value greater than $10
                 if (tokenValue > 10) {
                     totalValue += tokenValue;
                     networkHTML += `<li>${info.balance.toFixed(4)} ${symbol} - Price: $${tokenPrice.toFixed(2)} - Total: $${tokenValue.toFixed(2)}</li>`;
@@ -68,7 +63,6 @@ async function fetchWalletData() {
             tokenHTML += networkHTML;
         }
 
-        // Display results
         let resultHTML = `<h2>Wallet: ${walletAddress}</h2>`;
         resultHTML += `<p><strong>ETH Balance:</strong> ${ethBalance.toFixed(4)} ETH</p>`;
         resultHTML += `<p><strong>Total Wallet Value:</strong> $${totalValue.toFixed(2)}</p>`;
