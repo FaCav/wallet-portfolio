@@ -104,3 +104,21 @@ button:hover {
     padding: 8px;
     border-radius: 8px;
 }
+
+#network-buttons {
+    margin: 10px 0;
+}
+
+#network-buttons button {
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#network-buttons button:hover {
+    background-color: #0056b3;
+}
