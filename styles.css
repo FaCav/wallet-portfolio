@@ -26,7 +26,7 @@ header {
 }
 
 .logo {
-    width: 60px; /* Smaller size for better fit */
+    width: 100px; /* Smaller size for better fit */
     height: auto;
     margin-bottom: 10px;
 }
