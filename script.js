@@ -1,6 +1,9 @@
+let allTokens = [];
+let currentNetwork = 'ethereum';
+
 async function fetchWalletData() {
     const walletAddress = document.getElementById("walletAddress").value;
-    const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6'; // Your Etherscan API key
+    const etherscanApiKey = 'UIPWN6MEKBY2PNNN2TGKMMR6AJFF4Z7WZ6';
 
     if (!walletAddress) {
         document.getElementById("results").innerText = "Please enter a wallet address.";
@@ -13,7 +16,6 @@ async function fetchWalletData() {
         // Fetch ETH balance
         const ethResponse = await fetch(`https://api.etherscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest&apikey=${etherscanApiKey}`);
         const ethData = await ethResponse.json();
-        console.log("ETH Data:", ethData); // Log ETH data
 
         let ethBalance = 0;
         if (ethData.status === "1") {
@@ -23,7 +25,6 @@ async function fetchWalletData() {
         // Fetch ERC-20 token transactions
         const tokenResponse = await fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${walletAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${etherscanApiKey}`);
         const tokenData = await tokenResponse.json();
-        console.log("Token Data:", tokenData); // Log token data
 
         let tokenBalances = {};
         if (tokenData.status === "1") {
@@ -45,9 +46,6 @@ async function fetchWalletData() {
             });
         }
 
-        // Log token balances
-        console.log("Token Balances:", tokenBalances);
-
         // Store all tokens for filtering
         allTokens = tokenBalances;
 
@@ -56,16 +54,10 @@ async function fetchWalletData() {
         let tokenHTML = "";
 
         for (const [symbol, info] of Object.entries(allTokens)) {
-            const tokenPriceResponse = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}&convert=USD`, {
-                headers: {
-                    'X-CMC_PRO_API_KEY': coinMarketCapApiKey, // Use your CoinMarketCap API key
-                    'Accept': 'application/json'
-                }
-            });
+            const tokenPriceResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${info.tokenAddress}&vs_currencies=usd`);
             const priceData = await tokenPriceResponse.json();
-            console.log("Price Data for", symbol, ":", priceData); // Log price data
 
-            const tokenPrice = priceData.data[symbol] ? priceData.data[symbol].quote.USD.price : 0;
+            const tokenPrice = priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0;
             const tokenValue = info.balance * tokenPrice;
 
             // Only include tokens with a total value greater than $10
@@ -87,4 +79,17 @@ async function fetchWalletData() {
         document.getElementById("results").innerHTML = "Error fetching data. Please try again.";
         console.error("Error:", error);
     }
+}
+
+function filterTokens(network) {
+    currentNetwork = network; // Update current network
+    const filteredTokens = Object.entries(allTokens).filter(([symbol, info]) => info.network === currentNetwork);
+    
+    // Filter and display tokens only if the total value is greater than $10
+    const filteredHTML = filteredTokens.map(([symbol, info]) => {
+        const tokenValue = info.balance * (priceData[info.tokenAddress.toLowerCase()] ? priceData[info.tokenAddress.toLowerCase()].usd : 0);
+        return tokenValue > 10 ? `<li>${info.balance.toFixed(4)} ${symbol} - Total: $${tokenValue.toFixed(2)}</li>` : '';
+    }).join('');
+    
+    document.getElementById("results").innerHTML = `<h3>Filtered Tokens on ${network.charAt(0).toUpperCase() + network.slice(1)}:</h3><ul>${filteredHTML}</ul>`;
 }
